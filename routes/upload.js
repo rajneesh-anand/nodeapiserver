@@ -1,12 +1,22 @@
 const express = require("express");
 const { IncomingForm } = require("formidable");
 const fs = require("fs");
+const path = require("path");
 const prisma = require("../lib/prisma");
 const DatauriParser = require("datauri/parser");
-const path = require("path");
+const cloudinary = require("cloudinary").v2;
+const CImage = require("../db/images");
 
 const router = express.Router();
 const parser = new DatauriParser();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const cloudinaryUpload = (file) => cloudinary.uploader.upload(file);
 
 router.post("/", async (req, res) => {
   const data = await new Promise((resolve, reject) => {
@@ -26,52 +36,76 @@ router.post("/", async (req, res) => {
     photo
   );
 
-  try {
-    await prisma.post.create({
-      data: {
-        title: "title",
-        category: "category",
-        slug: "slug",
-        content: "content",
-        tags: ["fetured", "new added"],
-        image: photo64.content,
-        // author: { connect: { email: session?.user?.email } },
-      },
-    });
+  // Store Image to Database
 
-    res.status(200).json({
+  // try {
+  //   await prisma.post.create({
+  //     data: {
+  //       title: "title",
+  //       category: "category",
+  //       slug: "slug",
+  //       content: "content",
+  //       tags: ["fetured", "new added"],
+  //       image: photo64.content,
+  //       // author: { connect: { email: session?.user?.email } },
+  //     },
+  //   });
+
+  //   return res.status(200).json({
+  //     msg: "success",
+  //   });
+  // } catch (error) {
+  //   res.status(500).send(error);
+  // } finally {
+  //   async () => {
+  //     await prisma.$disconnect();
+  //   };
+  // }
+
+  // Upload Image to Cloudinary
+  try {
+    const uploadResult = await cloudinaryUpload(photo64.content);
+
+    const cImage = new CImage({
+      cloudinaryId: uploadResult.public_id,
+      url: uploadResult.secure_url,
+    });
+    await cImage.save();
+    // return res.json(cImage);
+
+    return res.status(200).json({
       msg: "success",
+      result: cImage,
     });
   } catch (error) {
     res.status(500).send(error);
-  } finally {
-    async () => {
-      await prisma.$disconnect();
-    };
   }
 });
 
 router.get("/", async (req, res) => {
-  try {
-    const posts = await prisma.post.findMany({
-      select: {
-        id: true,
-        title: true,
-        image: true,
-      },
-    });
+  // try {
+  //   const posts = await prisma.post.findMany({
+  //     select: {
+  //       id: true,
+  //       title: true,
+  //       image: true,
+  //     },
+  //   });
 
-    res.status(200).json({
-      msg: "success",
-      result: posts,
-    });
-  } catch (error) {
-    res.status(500).send(error);
-  } finally {
-    async () => {
-      await prisma.$disconnect();
-    };
-  }
+  //   res.status(200).json({
+  //     msg: "success",
+  //     result: posts,
+  //   });
+  // } catch (error) {
+  //   res.status(500).send(error);
+  // } finally {
+  //   async () => {
+  //     await prisma.$disconnect();
+  //   };
+  // }
+
+  const images = await CImage.getAll();
+  return res.status(200).json({ msg: "success", result: images });
 });
 
 module.exports = router;
