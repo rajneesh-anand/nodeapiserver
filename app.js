@@ -5,7 +5,8 @@ const upload = require("./routes/upload");
 const app = express();
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.json());
-
+//  origin: "https://victoria-five.vercel.app",
+// origin:"http://localhost:3000"
 const corsOptions = {
   origin: "https://victoria-five.vercel.app",
 };
