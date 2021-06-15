@@ -11,7 +11,7 @@ const app = express();
 // app.use(express.json());
 
 const corsOptions = {
-  origin: corsUrl,
+  origin: "http://localhost:3000",
 };
 // app.options("*", cors());
 // app.use(cors(corsOptions));
