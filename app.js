@@ -4,8 +4,8 @@ const cors = require("cors");
 const upload = require("./routes/upload");
 const isProd = process.env.NODE_ENV === "production";
 const corsUrl = isProd
-  ? "https://victoria-five.vercel.app"
-  : "http://localhost:3000";
+  ? "https://victoria-five.vercel.app/"
+  : "http://localhost:3000/";
 
 const app = express();
 // app.use(express.urlencoded({ extended: true }));
