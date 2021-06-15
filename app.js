@@ -1,5 +1,4 @@
 const express = require("express");
-const fs = require("fs");
 const cors = require("cors");
 const upload = require("./routes/upload");
 const isProd = process.env.NODE_ENV === "production";

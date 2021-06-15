@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
     path.extname(data.files.image.name).toString(),
     photo
   );
-let 
+
   try {
     await prisma.post.create({
       data: {
@@ -33,7 +33,7 @@ let
         category: "category",
         slug: "slug",
         content: "content",
-        tags:["fetured","new added"],
+        tags: ["fetured", "new added"],
         image: photo64.content,
         // author: { connect: { email: session?.user?.email } },
       },
