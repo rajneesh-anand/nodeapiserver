@@ -31,7 +31,8 @@ router.post("/", async (req, res) => {
       data: {
         title: "title",
         category: "category",
-        slug: "slug",
+        slug: ["slug", "slug-2"],
+        content: "content",
         image: photo64.content,
         // author: { connect: { email: session?.user?.email } },
       },
