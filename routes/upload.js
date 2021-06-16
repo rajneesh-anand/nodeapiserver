@@ -67,6 +67,9 @@ router.post("/", async (req, res) => {
     const uploadResult = await cloudinaryUpload(photo64.content);
 
     const cImage = new CImage({
+      title: data.fields.title,
+      excerpt: data.fields.excerpt,
+      categories: JSON.parse(data.fields.categories),
       cloudinaryId: uploadResult.public_id,
       url: uploadResult.secure_url,
     });
