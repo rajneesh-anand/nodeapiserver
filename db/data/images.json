@@ -1,78 +1,11 @@
 [
   {
-    "_id": "_7mvmf80w6",
-    "resource": "images",
-    "title": "Rajneesh Anand",
-    "excerpt": "Nature People Fashion Sea",
-    "categories": [
-      "new added"
-    ],
-    "cloudinaryId": "xg5gzihcfyf9banl7mfm",
-    "url": "https://res.cloudinary.com/dlywo5mxn/image/upload/v1623828011/xg5gzihcfyf9banl7mfm.jpg"
-  },
-  {
-    "_id": "_9i2w4lzyk",
-    "resource": "images",
-    "title": "Rajneesh Anand",
-    "excerpt": "Nature People Fashion Sea",
-    "categories": [
-      "featured",
-      "new added"
-    ],
-    "cloudinaryId": "m6g7kuytz6jw2cbt1qzu",
-    "url": "https://res.cloudinary.com/dlywo5mxn/image/upload/v1623828129/m6g7kuytz6jw2cbt1qzu.jpg"
-  },
-  {
-    "_id": "_fcxeo6zl3",
-    "resource": "images",
-    "title": "Rajneesh Anand",
-    "excerpt": "Nature People Fashion Sea",
-    "categories": [
-      "nature"
-    ],
-    "cloudinaryId": "pwoipkvwbl19zxnnvvli",
-    "url": "https://res.cloudinary.com/dlywo5mxn/image/upload/v1623835863/pwoipkvwbl19zxnnvvli.jpg"
-  },
-  {
     "_id": "_udf13haxx",
     "resource": "images",
     "title": "Rajneesh Anand",
     "excerpt": "Nature People Fashion Sea",
-    "categories": [
-      "new added",
-      "people"
-    ],
+    "categories": ["new added", "people"],
     "cloudinaryId": "ltahvsophcofwe2qh0ao",
     "url": "https://res.cloudinary.com/dlywo5mxn/image/upload/v1623836769/ltahvsophcofwe2qh0ao.jpg"
-  },
-  {
-    "_id": "_pgr3xjh4b",
-    "resource": "images",
-    "title": "Rajneesh Anand",
-    "excerpt": "Nature People Fashion Sea",
-    "categories": [
-      "new added",
-      "nature"
-    ],
-    "cloudinaryId": "sl014r3q6wxnph3duazi",
-    "url": "https://res.cloudinary.com/dlywo5mxn/image/upload/v1623839711/sl014r3q6wxnph3duazi.jpg"
-  },
-  {
-    "_id": "_qhyafqsw9",
-    "resource": "images",
-    "title": "Rajneesh Anand",
-    "excerpt": "Nature People Fashion Sea",
-    "categories": [],
-    "cloudinaryId": "awyymhzytis4ez6gaozm",
-    "url": "https://res.cloudinary.com/dlywo5mxn/image/upload/v1623839877/awyymhzytis4ez6gaozm.jpg"
-  },
-  {
-    "_id": "_eaftfqjz7",
-    "resource": "images",
-    "title": "Rajneesh Anand",
-    "excerpt": "Nature People Fashion Sea",
-    "categories": [],
-    "cloudinaryId": "b3ubi3qfngrjlq35lcqq",
-    "url": "https://res.cloudinary.com/dlywo5mxn/image/upload/v1623840083/b3ubi3qfngrjlq35lcqq.jpg"
   }
 ]
