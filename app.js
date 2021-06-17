@@ -8,10 +8,10 @@ require("dotenv").config();
 const app = express();
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.json());
-//  origin: "https://victoria-five.vercel.app",
+//  origin: "https://vic.vercel.app",
 // origin:"http://localhost:3000"
 const corsOptions = {
-  origin: "https://victoria-five.vercel.app",
+  origin: "https://vic.vercel.app",
 };
 app.options("*", cors());
 app.use(cors(corsOptions));
