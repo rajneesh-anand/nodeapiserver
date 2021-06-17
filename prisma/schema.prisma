@@ -12,7 +12,7 @@ generator client {
 model Post {
   id        Int     @default(autoincrement()) @id
   title     String?
-  category  String?
+  categories String[]
   slug      String?
   content   String?
   tags      String[]

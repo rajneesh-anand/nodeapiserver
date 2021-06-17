@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "pg:run": "npx prisma db push --preview-feature"
   },
   "keywords": [],
   "author": "",

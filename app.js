@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const upload = require("./routes/upload");
+const publish = require("./routes/publish");
+const post = require("./routes/post");
 require("dotenv").config();
 
 const app = express();
@@ -15,6 +17,8 @@ app.options("*", cors());
 app.use(cors(corsOptions));
 
 app.use("/api/upload", upload);
+app.use("/api/publish", publish);
+app.use("/api/post", post);
 
 const port = process.env.PORT || 8080;
 
