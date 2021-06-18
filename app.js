@@ -11,7 +11,7 @@ const app = express();
 //  origin: "https://vic.vercel.app",
 // origin:"http://localhost:3000"
 const corsOptions = {
-  origin: "https://vic.vercel.app",
+  origin: "http://localhost:3000",
 };
 app.options("*", cors());
 app.use(cors(corsOptions));
