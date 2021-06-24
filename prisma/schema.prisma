@@ -24,6 +24,16 @@ model Post {
  
 }
 
+model Product {
+  id       Int     @default(autoincrement()) @id
+  name     String?
+  description String ?
+  image    String?
+  price    Decimal
+  discount Int?
+  inStock Boolean @default(true) 
+}
+
 model User {
   id            Int       @default(autoincrement()) @id
   name          String?

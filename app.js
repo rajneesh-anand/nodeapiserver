@@ -3,6 +3,7 @@ const cors = require("cors");
 const upload = require("./routes/upload");
 const publish = require("./routes/publish");
 const post = require("./routes/post");
+const product = require("./routes/product");
 require("dotenv").config();
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(cors(corsOptions));
 app.use("/api/upload", upload);
 app.use("/api/publish", publish);
 app.use("/api/post", post);
+app.use("/api/product", product);
 
 const port = process.env.PORT || 8080;
 
