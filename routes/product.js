@@ -79,4 +79,72 @@ router.get("/", async (req, res) => {
   }
 });
 
+// router.post("/:id", async (req, res) => {
+//   const productId = req.params.id;
+//   console.log(productId);
+
+//   const data = await new Promise((resolve, reject) => {
+//     const form = new IncomingForm();
+//     form.parse(req, (err, fields, files) => {
+//       if (err) return reject(err);
+//       resolve({ fields, files });
+//     });
+//   });
+
+//   try {
+//     if (Object.keys(data.files).length !== 0) {
+//       const photo = await fs.promises
+//         .readFile(data.files.image.path)
+//         .catch((err) => console.error("Failed to read file", err));
+
+//       let photo64 = parser.format(
+//         path.extname(data.files.image.name).toString(),
+//         photo
+//       );
+//       const uploadResult = await cloudinaryUpload(photo64.content);
+//       let result = await prisma.post.update({
+//         where: { id: Number(postId) },
+//         data: {
+//           title: data.fields.title,
+//           slug: data.fields.slug,
+//           content: data.fields.content,
+//           tags: JSON.parse(data.fields.tags),
+//           categories: JSON.parse(data.fields.categories),
+//           published: JSON.parse(data.fields.published),
+//           image: uploadResult.secure_url,
+//           author: { connect: { email: data.fields.author } },
+//         },
+//       });
+//       return res.status(200).json({
+//         msg: "success",
+//         data: result,
+//       });
+//     } else {
+//       let result = await prisma.post.update({
+//         where: { id: Number(postId) },
+//         data: {
+//           title: data.fields.title,
+//           slug: data.fields.slug,
+//           content: data.fields.content,
+//           tags: JSON.parse(data.fields.tags),
+//           categories: JSON.parse(data.fields.categories),
+//           published: JSON.parse(data.fields.published),
+//           author: { connect: { email: data.fields.author } },
+//         },
+//       });
+//       return res.status(200).json({
+//         msg: "success",
+//         data: result,
+//       });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send(error);
+//   } finally {
+//     async () => {
+//       await prisma.$disconnect();
+//     };
+//   }
+// });
+
 module.exports = router;
