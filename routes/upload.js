@@ -74,7 +74,6 @@ router.post("/", async (req, res) => {
       url: uploadResult.secure_url,
     });
     await cImage.save();
-    // return res.json(cImage);
 
     return res.status(200).json({
       msg: "success",

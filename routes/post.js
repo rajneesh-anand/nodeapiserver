@@ -25,11 +25,11 @@ router.get("/", async (req, res) => {
       },
       include: {
         author: {
-          select: { name: true },
+          select: { name: true, image: true },
         },
       },
     });
-    // console.log(blogs);
+
     return res.status(200).json({
       msg: "success",
       result: blogs,
