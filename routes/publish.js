@@ -43,6 +43,7 @@ router.post("/", async (req, res) => {
         title: data.fields.title,
         slug: data.fields.slug,
         content: data.fields.content,
+        template: data.fields.template,
         tags: JSON.parse(data.fields.tags),
         categories: JSON.parse(data.fields.categories),
         published: JSON.parse(data.fields.published),
