@@ -4,6 +4,8 @@ const upload = require("./routes/upload");
 const publish = require("./routes/publish");
 const post = require("./routes/post");
 const product = require("./routes/product");
+const video = require("./routes/video");
+const awsupload = require("./routes/awsupload");
 require("dotenv").config();
 
 const app = express();
@@ -29,6 +31,8 @@ app.use("/api/upload", upload);
 app.use("/api/publish", publish);
 app.use("/api/post", post);
 app.use("/api/product", product);
+app.use("/api/video", video);
+app.use("/api/awsupload", awsupload);
 
 const port = process.env.PORT || 8080;
 
