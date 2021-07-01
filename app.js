@@ -12,7 +12,11 @@ const app = express();
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.json());
 
-var allowedDomains = ["https://vic.vercel.app", "http://localhost:3000"];
+var allowedDomains = [
+  "https://vic.vercel.app",
+  "https://kokeliko.vercel.app",
+  "http://localhost:3000",
+];
 app.use(
   cors({
     origin: function (origin, callback) {

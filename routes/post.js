@@ -55,7 +55,7 @@ router.post("/:id", async (req, res) => {
       resolve({ fields, files });
     });
   });
-
+  console.log(data);
   try {
     if (Object.keys(data.files).length !== 0) {
       const photo = await fs.promises
