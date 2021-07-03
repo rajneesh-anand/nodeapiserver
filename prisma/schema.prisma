@@ -12,7 +12,8 @@ generator client {
 model Post {
   id        Int     @default(autoincrement()) @id
   title     String?
-  categories String[]
+  subCategories String[]
+  category String?
   slug      String?
   content   String?
   template   String?
