@@ -55,7 +55,7 @@ router.post("/:id", async (req, res) => {
       resolve({ fields, files });
     });
   });
-  console.log(data);
+
   try {
     if (Object.keys(data.files).length !== 0) {
       const photo = await fs.promises
@@ -76,7 +76,7 @@ router.post("/:id", async (req, res) => {
           template: data.fields.template,
           category: data.fields.category,
           tags: JSON.parse(data.fields.tags),
-          subCategories: JSON.parse(data.fields.categories),
+          subCategories: JSON.parse(data.fields.subCategories),
           published: JSON.parse(data.fields.published),
           image: uploadResult.secure_url,
           author: { connect: { email: data.fields.author } },
@@ -96,7 +96,7 @@ router.post("/:id", async (req, res) => {
           template: data.fields.template,
           category: data.fields.category,
           tags: JSON.parse(data.fields.tags),
-          subCategories: JSON.parse(data.fields.categories),
+          subCategories: JSON.parse(data.fields.subCategories),
           published: JSON.parse(data.fields.published),
           author: { connect: { email: data.fields.author } },
         },

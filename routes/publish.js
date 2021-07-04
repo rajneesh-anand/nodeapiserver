@@ -26,37 +26,57 @@ router.post("/", async (req, res) => {
     });
   });
 
-  const photo = await fs.promises
-    .readFile(data.files.image.path)
-    .catch((err) => console.error("Failed to read file", err));
-
-  let photo64 = parser.format(
-    path.extname(data.files.image.name).toString(),
-    photo
-  );
-
   try {
-    const uploadResult = await cloudinaryUpload(photo64.content);
+    if (Object.keys(data.files).length !== 0) {
+      const photo = await fs.promises
+        .readFile(data.files.image.path)
+        .catch((err) => console.error("Failed to read file", err));
 
-    const result = await prisma.post.create({
-      data: {
-        title: data.fields.title,
-        slug: data.fields.slug,
-        content: data.fields.content,
-        template: data.fields.template,
-        category: data.fields.category,
-        tags: JSON.parse(data.fields.tags),
-        subCategories: JSON.parse(data.fields.subCategories),
-        published: JSON.parse(data.fields.published),
-        image: uploadResult.secure_url,
-        author: { connect: { email: data.fields.author } },
-      },
-    });
+      let photo64 = parser.format(
+        path.extname(data.files.image.name).toString(),
+        photo
+      );
+      const uploadResult = await cloudinaryUpload(photo64.content);
 
-    return res.status(200).json({
-      msg: "success",
-      data: result,
-    });
+      const result = await prisma.post.create({
+        data: {
+          title: data.fields.title,
+          slug: data.fields.slug,
+          content: data.fields.content,
+          template: data.fields.template,
+          category: data.fields.category,
+          tags: JSON.parse(data.fields.tags),
+          subCategories: JSON.parse(data.fields.subCategories),
+          published: JSON.parse(data.fields.published),
+          image: uploadResult.secure_url,
+          author: { connect: { email: data.fields.author } },
+        },
+      });
+
+      return res.status(200).json({
+        msg: "success",
+        data: result,
+      });
+    } else {
+      const result = await prisma.post.create({
+        data: {
+          title: data.fields.title,
+          slug: data.fields.slug,
+          content: data.fields.content,
+          template: data.fields.template,
+          category: data.fields.category,
+          tags: JSON.parse(data.fields.tags),
+          subCategories: JSON.parse(data.fields.subCategories),
+          published: JSON.parse(data.fields.published),
+          author: { connect: { email: data.fields.author } },
+        },
+      });
+
+      return res.status(200).json({
+        msg: "success",
+        data: result,
+      });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
