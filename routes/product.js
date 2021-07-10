@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
       resolve({ fields, files });
     });
   });
-
+  console.log(data);
   const photo = await fs.promises
     .readFile(data.files.image.path)
     .catch((err) => console.error("Failed to read file", err));
@@ -40,10 +40,19 @@ router.post("/", async (req, res) => {
     const result = await prisma.product.create({
       data: {
         name: data.fields.product_name,
+        slug: data.fields.slug,
         price: Number(data.fields.selling_price),
         discount: Number(data.fields.discount),
+        gst: Number(data.fields.gst),
         description: data.fields.description,
         image: uploadResult.secure_url,
+        category: data.fields.category,
+        subCategory: JSON.parse(data.fields.sub_category),
+        size: data.fields.size,
+        weight: Number(data.fields.weight),
+        minimumQuantity: Number(data.fields.minimum_quantity),
+        usage: data.fields.usage,
+        inStock: JSON.parse(data.fields.stock),
       },
     });
 
