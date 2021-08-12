@@ -17,7 +17,7 @@ cloudinary.config({
 
 const cloudinaryUpload = (file) => cloudinary.uploader.upload(file);
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   const data = await new Promise((resolve, reject) => {
     const form = new IncomingForm();
     form.parse(req, (err, fields, files) => {
@@ -26,18 +26,20 @@ router.post("/", async (req, res) => {
     });
   });
 
-  try {
-    if (Object.keys(data.files).length !== 0) {
-      const photo = await fs.promises
-        .readFile(data.files.image.path)
-        .catch((err) => console.error("Failed to read file", err));
+  console.log(data);
 
-      let photo64 = parser.format(
-        path.extname(data.files.image.name).toString(),
-        photo
-      );
-      const uploadResult = await cloudinaryUpload(photo64.content);
+  if (Object.keys(data.files).length !== 0) {
+    const photo = await fs.promises
+      .readFile(data.files.image.path)
+      .catch((err) => console.error("Failed to read file", err));
 
+    let photo64 = parser.format(
+      path.extname(data.files.image.name).toString(),
+      photo
+    );
+    const uploadResult = await cloudinaryUpload(photo64.content);
+
+    try {
       const result = await prisma.post.create({
         data: {
           title: data.fields.title,
@@ -53,11 +55,20 @@ router.post("/", async (req, res) => {
         },
       });
 
-      return res.status(200).json({
+      res.status(200).json({
         msg: "success",
         data: result,
       });
-    } else {
+    } catch (error) {
+      console.log(error);
+      return next(error);
+    } finally {
+      async () => {
+        await prisma.$disconnect();
+      };
+    }
+  } else {
+    try {
       const result = await prisma.post.create({
         data: {
           title: data.fields.title,
@@ -72,60 +83,101 @@ router.post("/", async (req, res) => {
         },
       });
 
-      return res.status(200).json({
+      res.status(200).json({
         msg: "success",
         data: result,
       });
+    } catch (error) {
+      console.log(error);
+      return next(error);
+    } finally {
+      async () => {
+        await prisma.$disconnect();
+      };
     }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
-  } finally {
-    async () => {
-      await prisma.$disconnect();
-    };
   }
 });
 
-router.get("/", async (req, res) => {
-  const images = await CImage.getAll();
-  return res.status(200).json({ msg: "success", result: images });
-});
-
-router.put("/:id/:status", async (req, res) => {
-  try {
-    const postId = req.params.id;
-    const postStatus = JSON.parse(req.params.status);
-    await prisma.post.update({
-      where: { id: Number(postId) },
-      data: { published: postStatus },
+router.post("/:id", async (req, res, next) => {
+  const postId = req.params.id;
+  console.log(postId);
+  const data = await new Promise((resolve, reject) => {
+    const form = new IncomingForm();
+    form.parse(req, (err, fields, files) => {
+      if (err) return reject(err);
+      resolve({ fields, files });
     });
-    res.status(200).json({ msg: "success" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
-  } finally {
-    async () => {
-      await prisma.$disconnect();
-    };
-  }
-});
+  });
 
-router.get("/draft/:id", async (req, res) => {
-  try {
-    const postId = req.params.id;
+  if (Object.keys(data.files).length !== 0) {
+    const photo = await fs.promises
+      .readFile(data.files.image.path)
+      .catch((err) => console.error("Failed to read file", err));
 
-    const post = await prisma.post.findFirst({
-      where: { id: Number(postId) },
-    });
-    res.status(200).json({ msg: "success", result: post });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
-  } finally {
-    async () => {
-      await prisma.$disconnect();
-    };
+    let photo64 = parser.format(
+      path.extname(data.files.image.name).toString(),
+      photo
+    );
+    const uploadResult = await cloudinaryUpload(photo64.content);
+
+    try {
+      let result = await prisma.post.update({
+        where: { id: Number(postId) },
+        data: {
+          title: data.fields.title,
+          slug: data.fields.slug,
+          content: data.fields.content,
+          template: data.fields.template,
+          category: data.fields.category,
+          tags: JSON.parse(data.fields.tags),
+          subCategories: JSON.parse(data.fields.subCategories),
+          published: JSON.parse(data.fields.published),
+          image: uploadResult.secure_url,
+          author: { connect: { email: data.fields.author } },
+        },
+      });
+
+      res.status(200).json({
+        msg: "success",
+        data: result,
+      });
+    } catch (error) {
+      console.log(error);
+      return next(error);
+    } finally {
+      async () => {
+        await prisma.$disconnect();
+      };
+    }
+  } else {
+    try {
+      let result = await prisma.post.update({
+        where: { id: Number(postId) },
+        data: {
+          title: data.fields.title,
+          slug: data.fields.slug,
+          content: data.fields.content,
+          template: data.fields.template,
+          category: data.fields.category,
+          tags: JSON.parse(data.fields.tags),
+          subCategories: JSON.parse(data.fields.subCategories),
+          published: JSON.parse(data.fields.published),
+          author: { connect: { email: data.fields.author } },
+        },
+      });
+
+      res.status(200).json({
+        msg: "success",
+        data: result,
+      });
+    } catch (error) {
+      console.log(error);
+      return next(error);
+    } finally {
+      async () => {
+        await prisma.$disconnect();
+      };
+    }
   }
 });
 

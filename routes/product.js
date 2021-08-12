@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
       resolve({ fields, files });
     });
   });
-  console.log(data);
+
   const photo = await fs.promises
     .readFile(data.files.image.path)
     .catch((err) => console.error("Failed to read file", err));
@@ -41,13 +41,14 @@ router.post("/", async (req, res) => {
       data: {
         name: data.fields.product_name,
         slug: data.fields.slug,
-        price: Number(data.fields.selling_price),
+        price: Number(data.fields.mrp_price),
+        sellingPrice: Number(data.fields.selling_price),
         discount: Number(data.fields.discount),
         gst: Number(data.fields.gst),
         description: data.fields.description,
         image: uploadResult.secure_url,
         category: data.fields.category,
-        subCategory: JSON.parse(data.fields.sub_category),
+        subCategories: JSON.parse(data.fields.sub_category),
         size: data.fields.size,
         weight: Number(data.fields.weight),
         minimumQuantity: Number(data.fields.minimum_quantity),
@@ -88,72 +89,85 @@ router.get("/", async (req, res) => {
   }
 });
 
-// router.post("/:id", async (req, res) => {
-//   const productId = req.params.id;
-//   console.log(productId);
+router.post("/:id", async (req, res) => {
+  const productId = req.params.id;
 
-//   const data = await new Promise((resolve, reject) => {
-//     const form = new IncomingForm();
-//     form.parse(req, (err, fields, files) => {
-//       if (err) return reject(err);
-//       resolve({ fields, files });
-//     });
-//   });
+  const data = await new Promise((resolve, reject) => {
+    const form = new IncomingForm();
+    form.parse(req, (err, fields, files) => {
+      if (err) return reject(err);
+      resolve({ fields, files });
+    });
+  });
 
-//   try {
-//     if (Object.keys(data.files).length !== 0) {
-//       const photo = await fs.promises
-//         .readFile(data.files.image.path)
-//         .catch((err) => console.error("Failed to read file", err));
+  try {
+    if (Object.keys(data.files).length !== 0) {
+      const photo = await fs.promises
+        .readFile(data.files.image.path)
+        .catch((err) => console.error("Failed to read file", err));
 
-//       let photo64 = parser.format(
-//         path.extname(data.files.image.name).toString(),
-//         photo
-//       );
-//       const uploadResult = await cloudinaryUpload(photo64.content);
-//       let result = await prisma.post.update({
-//         where: { id: Number(postId) },
-//         data: {
-//           title: data.fields.title,
-//           slug: data.fields.slug,
-//           content: data.fields.content,
-//           tags: JSON.parse(data.fields.tags),
-//           categories: JSON.parse(data.fields.categories),
-//           published: JSON.parse(data.fields.published),
-//           image: uploadResult.secure_url,
-//           author: { connect: { email: data.fields.author } },
-//         },
-//       });
-//       return res.status(200).json({
-//         msg: "success",
-//         data: result,
-//       });
-//     } else {
-//       let result = await prisma.post.update({
-//         where: { id: Number(postId) },
-//         data: {
-//           title: data.fields.title,
-//           slug: data.fields.slug,
-//           content: data.fields.content,
-//           tags: JSON.parse(data.fields.tags),
-//           categories: JSON.parse(data.fields.categories),
-//           published: JSON.parse(data.fields.published),
-//           author: { connect: { email: data.fields.author } },
-//         },
-//       });
-//       return res.status(200).json({
-//         msg: "success",
-//         data: result,
-//       });
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send(error);
-//   } finally {
-//     async () => {
-//       await prisma.$disconnect();
-//     };
-//   }
-// });
+      const photo64 = parser.format(
+        path.extname(data.files.image.name).toString(),
+        photo
+      );
+      const uploadResult = await cloudinaryUpload(photo64.content);
+      let result = await prisma.product.update({
+        where: { id: Number(productId) },
+        data: {
+          name: data.fields.product_name,
+          slug: data.fields.slug,
+          price: Number(data.fields.mrp_price),
+          sellingPrice: Number(data.fields.selling_price),
+          discount: Number(data.fields.discount),
+          gst: Number(data.fields.gst),
+          description: data.fields.description,
+          image: uploadResult.secure_url,
+          category: data.fields.category,
+          subCategories: JSON.parse(data.fields.sub_category),
+          size: data.fields.size,
+          weight: Number(data.fields.weight),
+          minimumQuantity: Number(data.fields.minimum_quantity),
+          usage: data.fields.usage,
+          inStock: JSON.parse(data.fields.stock),
+        },
+      });
+      return res.status(200).json({
+        msg: "success",
+        data: result,
+      });
+    } else {
+      let result = await prisma.product.update({
+        where: { id: Number(productId) },
+        data: {
+          name: data.fields.product_name,
+          slug: data.fields.slug,
+          price: Number(data.fields.mrp_price),
+          sellingPrice: Number(data.fields.selling_price),
+          discount: Number(data.fields.discount),
+          gst: Number(data.fields.gst),
+          description: data.fields.description,
+          category: data.fields.category,
+          subCategories: JSON.parse(data.fields.sub_category),
+          size: data.fields.size,
+          weight: Number(data.fields.weight),
+          minimumQuantity: Number(data.fields.minimum_quantity),
+          usage: data.fields.usage,
+          inStock: JSON.parse(data.fields.stock),
+        },
+      });
+      return res.status(200).json({
+        msg: "success",
+        data: result,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  } finally {
+    async () => {
+      await prisma.$disconnect();
+    };
+  }
+});
 
 module.exports = router;

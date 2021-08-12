@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "pg:run": "npx prisma db push --preview-feature"
+    "pg:run": "npx prisma db push"
   },
   "keywords": [],
   "author": "",
